@@ -2,27 +2,38 @@ import processing.core.PVector;
 
 import java.util.ArrayList;
 
+import static processing.core.PApplet.radians;
+
 public class Ray {
     PVector start;
     PVector end;
-    int angle;
+    PVector direction;
+    PVector pointOfIntersection;
+    PVector closestIntersection;
+
     ArrayList<Wall> Walls;
 
-    Ray (PVector start, PVector end, int angle) {
+    Ray(PVector start, int angle) {
         this.start = start;
-        this.end = end;
-        this.angle = angle;
+        this.direction = PVector.fromAngle(radians(angle));
+       MainClass.processing.println(angle);
+       //MainClass.processing.println(this.direction.angleBetween(direction,start));
 
     }
-    public void display (ArrayList<Wall> Walls) {
+
+    public void display(ArrayList<Wall> Walls) {
+//        direction = end_.sub(start);
+//        direction.normalize();
+
         if (intersectsWall(Walls)) {
 
-            MainClass.processing.fill(255,0,0,100);
-            MainClass.processing.stroke(3);
-            MainClass.processing.line(start.x,start.y,MainClass.processing.mouseX,MainClass.processing.mouseY);
+            MainClass.processing.fill(255,  200);
+            MainClass.processing.stroke(255,100);
+            MainClass.processing.strokeWeight(0.5f);
+            MainClass.processing.line(start.x, start.y, closestIntersection.x , closestIntersection.y );
         }
 
- //       MainClass.processing.popMatrix();
+        //       MainClass.processing.popMatrix();
 
     }
 
@@ -30,26 +41,45 @@ public class Ray {
         float t = 0;
         float u = 0;
         boolean hit = false;
+        float closestWall = MainClass.processing.width * MainClass.processing.height;
         for (Wall wall : Walls) {
             float x1 = wall.start.x;
             float y1 = wall.start.y;
             float x2 = wall.end.x;
             float y2 = wall.end.y;
-            float x3 = MainClass.processing.width / 2;
-            float y3 = MainClass.processing.height / 2;
-            float x4 = MainClass.processing.mouseX;
-            float y4 = MainClass.processing.mouseY;
+            float x3 = start.x;
+            float y3 = start.y;
+            float x4 = start.x + direction.x;
+            float y4 = start.y + direction.y;
             float tnum = (x1 - x3) * (y3 - y4) - (y1 - y3) * (x3 - x4);
             float unum = (x1 - x2) * (y1 - y3) - (y1 - y2) * (x1 - x3);
             float denom = (x1 - x2) * (y3 - y4) - (y1 - y2) * (x3 - x4);
             t = tnum / denom;
             u = unum / denom;
             if (t > 0 & t < 1 & u < 1) {
-                return true;
+                pointOfIntersection = new PVector((x1 + t * (x2 - x1)), (y1 + t * (y2 - y1)));
+                float dist = start.dist(pointOfIntersection);
+                if (dist<closestWall) {
+                    closestWall= dist;
+                    closestIntersection = pointOfIntersection;
+                }
+               // showPointOfIntersection(closestIntersection);
+                hit = true;
             }
 
         }
-        return false;
+        if (hit) {
+            return true;
+        } else {
+            return false;
+        }
+
+    }
+
+    public void showPointOfIntersection(PVector pos) {
+        MainClass.processing.fill(255, 10, 255);
+        MainClass.processing.ellipse(pos.x, pos.y, 8, 8);
 
     }
 }
+

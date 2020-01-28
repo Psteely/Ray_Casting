@@ -21,15 +21,17 @@ public class Ray {
 
     }
 
-    public void display(ArrayList<Wall> Walls) {
+
+    public void display(ArrayList<Wall> Walls, PVector move) {
 //        direction = end_.sub(start);
 //        direction.normalize();
+        start = move;
 
         if (intersectsWall(Walls)) {
 
-            MainClass.processing.fill(255,  200);
-            MainClass.processing.stroke(255,100);
-            MainClass.processing.strokeWeight(0.5f);
+            //MainClass.processing.fill(255,  200);
+            MainClass.processing.stroke(255,200);
+            MainClass.processing.strokeWeight(0.3f);
             MainClass.processing.line(start.x, start.y, closestIntersection.x , closestIntersection.y );
         }
 

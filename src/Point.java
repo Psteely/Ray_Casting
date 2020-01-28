@@ -4,12 +4,12 @@ import java.util.ArrayList;
 
 public class Point {
     PVector pos;
-    PVector vel;
+    PVector direction;
     int rayAngle = 1;
     int angle;
     Ray[] r;
     float xOff = 0;
-    float yOff = 1000000 ;
+    float yOff = 10000 ;
 
     Point(PVector pos) {
         this.pos = pos;
@@ -21,8 +21,9 @@ public class Point {
     }
 
     public void display(ArrayList<Wall> Walls) {
+
         for (int i = 0; i < 360 / rayAngle; i++) {
-            r[i].display(Walls);
+            r[i].display(Walls, pos);
         }
         MainClass.processing.fill(255, 0, 0, 100);
         MainClass.processing.noStroke();
@@ -32,11 +33,13 @@ public class Point {
     public void movePoint() {
 
         float moveFactor = 3;
-        vel = new PVector(MainClass.processing.noise(xOff),MainClass.processing.noise(yOff));
-        xOff += MainClass.processing.random(-0.5f,0.5f);
-        yOff += MainClass.processing.random(-0.5f,0.5f);
+        direction = new PVector(MainClass.processing.noise(xOff) * MainClass.processing.width,MainClass.processing.noise(yOff) * MainClass.processing.height);
+//        xOff += MainClass.processing.random(-0.1f,0.1f);
+//        yOff += MainClass.processing.random(-0.1f,0.1f);
+        xOff += 0.01;
+        yOff += 0.01;
 
-        pos.add(vel);
+        pos = direction;
 
     }
 }

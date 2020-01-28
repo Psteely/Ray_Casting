@@ -31,12 +31,13 @@ public class MainClass extends PApplet {
     }
 
     public void draw() {
-        background(0);
+        background(0,200);
         for (Wall w : Walls) {
             w.display();
         }
         p.display(Walls);
         p.movePoint();
+
 
 
         if (mousePressed) {

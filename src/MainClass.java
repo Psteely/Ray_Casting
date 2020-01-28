@@ -6,7 +6,7 @@ import java.util.ArrayList;
 public class MainClass extends PApplet {
     public static PApplet processing;
 
-    //
+    // Added on Linux
     public static void main(String[] args) {
         PApplet.main("MainClass", args);
     }
